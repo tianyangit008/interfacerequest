@@ -1,11 +1,11 @@
 <config>
 
     <database>
-        <host>10.70.93.205</host>
-        <port>3306</port>
-        <db>qa_system</db>
-        <user>finqa</user>
-        <password>qa123456</password>
+        <host></host>
+        <port></port>
+        <db></db>
+        <user></user>
+        <password></password>
     </database>
 
 </config>
