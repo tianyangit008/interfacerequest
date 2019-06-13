@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="../static/js/bootstrap-select.min.css" rel="stylesheet">
+    <!--<link href="../static/js/bootstrap.min.css" rel="stylesheet">-->
+    <link href="../static/js/bootstrap.css" rel="stylesheet">
+    <script src="../static/js/popper.min.js" ></script>
+    <script src="../static/js/jquery-3.4.0.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/bootstrap-select.min.js"></script>
+
+    <title>接口请求查看</title>
+    <script>
+        function getXmlHttpRequest(){
+              var xht = null;
+              if((typeof XMLHttpRequest) !='undefined'){
+                    xht = new XMLHttpRequest();
+              }else{
+                    xht = new ActiveXObject('Microsoft.XMLHttp');
+              }
+              return xht;
+        }
+        function get_domain_select(){
+            var xht=getXmlHttpRequest();
+            var times=new Date().getTime();
+            xht.open('get','/get_domain_select?times='+times,true)
+            xht.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
+            xht.onreadystatechange=function(){
+               if(xht.readyState==4){
+                  if(xht.status == 200){
+                       var res=xht.responseText;
+                       var obj=eval("("+res+")")
+                       for(i=0;i<obj.length;i++){
+                           var option_data="<option value='"+obj[i].key+"'>"+obj[i].value+"</option>";
+                           $('#domain').append(option_data);
+                       }
+                       $('.selectpicker').selectpicker('refresh');
+                  }else{
+                       alert("系统错误")
+                  }
+               }
+            };
+        xht.send(null);
+        }
+        window.onload=get_domain_select();
+
+        function get_interface_select(){
+              var xht=getXmlHttpRequest();
+              var times=new Date().getTime();
+              var arr=$('#domain').val();
+              if(arr.length !=0){
+                  xht.open("get","/get_interfaces_select?&domain="+arr+"&times="+times,true);
+                  xht.setRequestHeader("Content-Type","application/x-www-from-urlencode");
+                  xht.onreadystatechange=function(){
+                  if(xht.readyState == 4){
+                      if(xht.status ==200){
+
+
+                      }else{
+                          alert("系统错误")
+                      }
+                  }
+                  };
+                  xht.send(null)
+              }
+        }
+    </script>
+</head>
+<body>
+    <form  id="f1" method="" action="url" >
+        <div style="float:left" >
+            <font size="3">域名:</font>
+        </div>
+        <div style="float:left">
+            <select id="domain" name="selectname" class="selectpicker" onchange="get_interface_select();" multiple>
+            </select>
+        </div>
+        <div style="float:left">
+            <font size="3">接口:</font>
+        </div>
+        <div style="float:left">
+            <select id="interfaces" class="selectpicker" multiple>
+            </select>
+        </div>
+        <!--<div style="float:left">日期:</div>-->
+        <div style="float:left">
+            <input type="text" id="put">
+        </div>
+        <div style="float:left">
+            <input type="submit" value="查询" />
+        </div>
+    </form>
+
+   </body>
+</html>
